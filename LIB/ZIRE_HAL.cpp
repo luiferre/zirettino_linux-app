@@ -78,27 +78,23 @@ NI_RESULT ZIRE_HAL::WriteData(char *value, uint32_t length, uint32_t timeout_ms,
 	if (!connected_ctrl | !connected_stream) { return NI_ERROR_NOTCONNECTED; }
 
 	ret = send(sockCTRL, value, (int)length + 1, 0);
-
+	
 	if (ret < 1) {
 		printf("WD: send failed with error: %d\n", ret);
 		close(sockCTRL);
 		close(sockSTREAM);
 		return NI_ERROR_SOCKET;
 	}
-	else {
-	  uint32_t *send_ack = (uint32_t *)malloc(sizeof(uint32_t));
-	  ret = recv(sockCTRL, (char*)send_ack, sizeof(uint32_t), 0x8);
-	  if (*send_ack = 0x12345678) {
+	else {	  
 		return NI_OK;
-	  }
 	}
 	return NI_ERROR_SOCKET;
 }
 
 NI_RESULT ZIRE_HAL::WriteINTData(int value, uint32_t length, uint32_t timeout_ms, uint32_t *written_data) {
 	char buffer[4] = { 0 };
-	buffer[0] = value; buffer[1] = value >> 8; buffer[2] = value >> 16; buffer[3] = value >> 24;
-	return WriteData(&buffer[0], length - 1, timeout_ms, written_data);
+	buffer[0] = value; buffer[1] = value >> 8; buffer[2] = value >> 16; buffer[3] = value >> 24;	
+	return WriteData(&buffer[0], 3, timeout_ms, written_data);
 }
 
 NI_RESULT ZIRE_HAL::WriteLONGData(unsigned long long value, uint32_t length, uint32_t timeout_ms, uint32_t *written_data) {

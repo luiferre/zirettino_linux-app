@@ -214,7 +214,7 @@ if __name__ == "__main__":
 
                         data['Date'] =  datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         data['Comment'] = comment
-                        data['Measure'] = f"Acquisition for {target} seconds"
+                        data['Measure'] = f"Acquisition for {target} packets"
 
                         # Salva il JSON aggiornato su un nuovo file
 
@@ -250,7 +250,7 @@ if __name__ == "__main__":
 
                     print(f"[ZIRE-APP]: Acquisition for {target} packets...")
                     ZireDAQ.start_acq_raw(save_path, False, int(target), role)
-                    subprocess.run(["python3", "decode_data.py", save_path, asic_id])
+                    subprocess.run(["/bin/python3", "decode_data.py", save_path])
                     ret = ZireCFG.reset_timestamp(ZireDAQ)
 
             elif free_check:

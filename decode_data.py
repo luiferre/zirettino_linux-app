@@ -4,7 +4,7 @@ import sys
 import os
 from tqdm import tqdm
 
-def decode_data_buffer(data_buffer, asic):
+def decode_data_buffer(data_buffer):
     temp_hg = []
     temp_lg = []
 
@@ -42,8 +42,7 @@ def decode_data_buffer(data_buffer, asic):
     new_data = {'TIMESTAMP (100ns)': timestamp, 'TRIGGERID': trigger_id, 
                 'DAQ ID 1': str(hex(daq1_id)), 'TRIGGER COUNTS 1': trigger1_counts, 'VALID 1': valid1, 'FLAG 1': flag1, 'ACK 1': validated1, 'LOST 1': lost1,
                 'DAQ ID 2': str(hex(daq2_id)), 'TRIGGER COUNTS 2': trigger2_counts, 'VALID 2': valid2, 'FLAG 2': flag2, 'ACK 2': validated2, 'LOST 2': lost2}
-
-    '''            
+                
     for x in range(4):
         for y in range(32):
             asic_ch_hg = f'DAQ1_Asic{x}_CH{y}_HG'
@@ -57,14 +56,6 @@ def decode_data_buffer(data_buffer, asic):
             asic_ch_lg = f'DAQ2_Asic{x}_CH{y}_LG'
             new_data[asic_ch_hg] = temp_hg[(x*32)+(y)+128]
             new_data[asic_ch_lg] = temp_lg [(x*32)+(y)+128]  
-    '''
-
-    for y in range(32):
-        x=asic
-        asic_ch_hg = f'DAQ1_Asic{x}_CH{y}_HG'
-        asic_ch_lg = f'DAQ1_Asic{x}_CH{y}_LG'
-        new_data[asic_ch_hg] = temp_hg[(x*32)+(y)]
-        new_data[asic_ch_lg] = temp_lg [(x*32)+(y)] 
 
     return new_data
 
@@ -81,9 +72,8 @@ def write_data_csv(file_path, data):
         writer = csv.DictWriter(file, fieldnames=data.keys(), delimiter=';')
         writer.writerow(data)
 
-def open_data(path, asic):
+def open_data(path):
     fieldnames = ['TIMESTAMP (100ns)',  'TRIGGERID', 'DAQ ID 1', 'TRIGGER COUNTS 1', 'VALID 1', 'FLAG 1', 'ACK 1', 'LOST 1', 'DAQ ID 2', 'TRIGGER COUNTS 2', 'VALID 2', 'FLAG 2', 'ACK 2', 'LOST 2']
-    '''
     for x in range(4):
         for y in range(32):
             fieldnames.append(f'DAQ1_Asic{x}_CH{y}_HG')
@@ -92,10 +82,6 @@ def open_data(path, asic):
         for y in range(32):
             fieldnames.append(f'DAQ2_Asic{x}_CH{y}_HG')
             fieldnames.append(f'DAQ2_Asic{x}_CH{y}_LG')
-    '''
-    for y in range(32):
-        fieldnames.append(f'DAQ1_Asic{asic}_CH{y}_HG')
-        fieldnames.append(f'DAQ1_Asic{asic}_CH{y}_LG')
 
     open_csv(path + "_data.csv", fieldnames)
 
@@ -111,7 +97,7 @@ def open_data(path, asic):
                     break
 
                 # Esegui la decodifica del pacchetto e scrivi sul CSV
-                write_data_csv(path + "_data.csv", decode_data_buffer(struct.unpack("Q" * 138, packet_data), asic))
+                write_data_csv(path + "_data.csv", decode_data_buffer(struct.unpack("Q" * 138, packet_data)))
                 
                 # Aggiorna la barra di avanzamento
                 pbar.update(1)
@@ -119,10 +105,9 @@ def open_data(path, asic):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         path = sys.argv[1]
-        asic = sys.argv[2]
         if path:
             print(f"Decoding: DATA...")
-            open_data(path, int(asic))
+            open_data(path)
             print("End Decoding...")
         else:
             print("Missing decoding parameters!")

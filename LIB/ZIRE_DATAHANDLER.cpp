@@ -284,7 +284,7 @@ void ZIRE_DATAHANDLER::Data_download(string path, bool _time, uint32_t target, s
 	bool first = false;
 
 	uint32_t *stats = (uint32_t*)malloc(sizeof(uint32_t)*(128+128+16+16));
-
+	
     _hal->WriteData("tdatareq", 7, COMM_TIMEOUT, &rw);
 
 	if (data_buffer == NULL) { return; }

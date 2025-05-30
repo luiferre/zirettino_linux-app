@@ -141,6 +141,10 @@ NI_RESULT ZireSDK::SetParameter(string Path, uint32_t value) {
 		hal->WriteData("teditper", 7, COMM_TIMEOUT, &rw);
 		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
 	}
+	else if (cmd == "triggper") {
+		hal->WriteData("triggper", 7, COMM_TIMEOUT, &rw);
+		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
+	}
     else if (cmd == "holdwind") {
 		hal->WriteData("holdwind", 7, COMM_TIMEOUT, &rw);
 		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
@@ -163,10 +167,6 @@ NI_RESULT ZireSDK::SetParameter(string Path, uint32_t value) {
 	}
 	else if (cmd == "trigmode") {
 		hal->WriteData("trigmode", 7, COMM_TIMEOUT, &rw);
-		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
-	}
-    else if (cmd == "tcrgmask") {
-		hal->WriteData("tcrgmask", 7, COMM_TIMEOUT, &rw);
 		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
 	}
 	else if (cmd == "vldtiout") {
