@@ -137,6 +137,10 @@ NI_RESULT ZireSDK::SetParameter(string Path, uint32_t value) {
 		hal->WriteData("conctper", 7, COMM_TIMEOUT, &rw);
 		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
 	}
+	else if (cmd == "triggper") {
+		hal->WriteData("triggper", 7, COMM_TIMEOUT, &rw);
+		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
+	}
     else if (cmd == "teditper") {
 		hal->WriteData("teditper", 7, COMM_TIMEOUT, &rw);
 		return hal->WriteINTData(value, 7, COMM_TIMEOUT, &rw);
